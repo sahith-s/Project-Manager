@@ -1,14 +1,17 @@
 import Input from "./Input";
-import { useRef } from "react";
+import { useRef,useContext } from "react";
+import { ProjectContext } from "./store/ProjectProvider";
 import Modal from "./Modal";
-export default function NewProject({onAdd, state}) {
+export default function NewProject() {
     const modal=useRef();
+
+    const {saveProject,handleCancel} = useContext(ProjectContext);
 
     const title= useRef(null);
     const description= useRef(null);
     const dueDate= useRef(null);
 
-    function handleSave(){
+    function SaveHandler(){
 
         const projectData = {
             title: title.current.value,
@@ -19,7 +22,7 @@ export default function NewProject({onAdd, state}) {
             showError();
             return;
         }
-        onAdd(projectData);
+        saveProject(projectData);
 
     }
     function showError(){
@@ -30,10 +33,10 @@ export default function NewProject({onAdd, state}) {
             <div className="flex flex-col w-11/12 p-7">
         <Modal ref={modal} />
                 <div className="flex justify-end space-x-4 mb-4">
-                    <button onClick={state} className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400">
+                    <button onClick={handleCancel} className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400">
                         Cancel
                     </button>
-                    <button onClick={handleSave} className="bg-zinc-800 text-white py-2 px-4 rounded hover:bg-black">
+                    <button onClick={SaveHandler} className="bg-zinc-800 text-white py-2 px-4 rounded hover:bg-black">
                         Save
                     </button>
                 </div>

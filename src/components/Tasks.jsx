@@ -1,6 +1,9 @@
 import { useRef } from 'react';
+import { useContext } from 'react';
+import { ProjectContext } from './store/ProjectProvider';
 
-export default function Tasks({ List, onClick, onDelete }) {
+export default function Tasks({ List }) {
+  const { taskClickHandle,handleCancel } = useContext(ProjectContext);
   const ref = useRef();
 
   return (
@@ -19,7 +22,7 @@ export default function Tasks({ List, onClick, onDelete }) {
             if (ref.current.value === "") {
               return;
             }
-            onClick(ref.current.value);
+            taskClickHandle(ref.current.value);
             ref.current.value = "";
           }}
         >
@@ -38,7 +41,7 @@ export default function Tasks({ List, onClick, onDelete }) {
             {task.text}
             <button
               className="absolute top-2 right-2 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
-              onClick={() => onDelete(task.id)}
+              onClick={() => handleCancel(task.id)}
             >
               Clear
             </button>

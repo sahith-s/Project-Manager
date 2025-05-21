@@ -1,14 +1,17 @@
 // import { tasks } from "../utils/Tasks";
-import { useState } from "react";
+import { useContext } from "react";
 import Button from "./Button";
-export default function SideBar({ onClick, tasks, onSelect, selected }) {
+import { ProjectContext } from "./store/ProjectProvider"; 
+
+export default function SideBar({ tasks,  }) {
+    const { selectedProject,handleSelect } = useContext(ProjectContext);
     return (
         <div
             className="h-[550px] w-1/6 bg-gray-900 text-white p-4 shadow-lg z-50 rounded-tr-xl rounded-br-xl"
         >
             <h2 className="text-xl font-bold mb-4 mt-6 uppercase pb-4">Your Projects</h2>
             <ul className="space-y-2">
-                <Button onClick={onClick}>
+                <Button >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 inline-block mr-2"
@@ -28,13 +31,13 @@ export default function SideBar({ onClick, tasks, onSelect, selected }) {
                     <li className="p-2 space-y-2 flex flex-col">
                         {tasks.map((task) => {
                             let className = "text-white rounded-md hover:bg-gray-800 border border-gray-700 px-4 py-2 shadow-md transition-all duration-200 ease-in-out";
-                            if (task.id === selected) {
+                            if (task.id === selectedProject) {
                                 className += " bg-gray-700";
                             }else {
                                 className += " bg-gray-900";
                             }
                             return (<button
-                                onClick={() => onSelect(task.id)}
+                                onClick={() => handleSelect(task.id)}
                                 key={task.id}
                                 className={className}>
                                 {task.title}
