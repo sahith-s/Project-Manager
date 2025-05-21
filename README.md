@@ -8,6 +8,7 @@ A simple project and task management app built with React and Tailwind CSS.
 - Add and remove tasks for each project
 - Responsive and modern UI with Tailwind CSS
 - Modal validation for project creation
+- Uses React Context API for state management
 
 ## Project Structure
 
@@ -29,7 +30,9 @@ A simple project and task management app built with React and Tailwind CSS.
 │       ├── NewProject.jsx
 │       ├── ShowProject.jsx
 │       ├── SideBar.jsx
-│       └── Tasks.jsx
+│       ├── Tasks.jsx
+│       └── store/
+│           └── ProjectProvider.jsx
 ├── index.html
 ├── package.json
 ├── postcss.config.js
@@ -96,3 +99,11 @@ yarn preview
 - [React](https://react.dev/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
+
+## Notes
+
+- The app uses a custom `ProjectProvider` (React Context) for managing projects and tasks.
+- All state and logic for projects and tasks is handled in `src/components/store/ProjectProvider.jsx`.
+- Tailwind CSS is configured via `tailwind.config.js` and imported in `src/index.css`.
+- If you see "unknown" warnings in your CSS, ensure Tailwind and PostCSS are properly installed and configured.
+
