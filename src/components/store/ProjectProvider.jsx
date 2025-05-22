@@ -1,4 +1,4 @@
-import { createContext , useState } from "react";
+import { createContext, useState, useEffect } from "react";
 export const ProjectContext = createContext({
   selectedProject: undefined,
   projects: [],
@@ -8,23 +8,29 @@ export const ProjectContext = createContext({
   handleCancel: () => {},
   handleSelect: () => {},
   handleDelete: () => {},
-  taskClickHandle: () => {}
+  taskClickHandle: () => {},
+  deleteTask: () => {}
 });
 
 function ProjectProvider({ children }) {
-    
-    const [projectState, setProjectState] = useState({
-    selectedProject: undefined,
-    projects: [],
-    tasks: []
+  // Load from localStorage or use default
+  const [projectState, setProjectState] = useState(() => {
+    const stored = localStorage.getItem("projectManagerState");
+    return stored
+      ? JSON.parse(stored)
+      : { selectedProject: undefined, projects: [], tasks: [] };
   });
+
+  // Save to localStorage on state change
+  useEffect(() => {
+    localStorage.setItem("projectManagerState", JSON.stringify(projectState));
+  }, [projectState]);
 
   function handleClick() {
     setProjectState(prevState => ({
       ...prevState,
       selectedProject: null
     }));
-    // console.log(projectState);
   }
 
   function saveProject(projectData) {
@@ -32,14 +38,13 @@ function ProjectProvider({ children }) {
       const newProject = {
         ...projectData,
         id: crypto.randomUUID()
-      }
+      };
       return {
         ...prevState,
         projects: [...prevState.projects, newProject],
         selectedProject: undefined
       };
     });
-    console.log(projectState);
   }
 
   function handleCancel() {
@@ -60,6 +65,7 @@ function ProjectProvider({ children }) {
     setProjectState(prevState => ({
       ...prevState,
       projects: prevState.projects.filter(project => project.id !== prevState.selectedProject),
+      tasks: prevState.tasks.filter(task => task.projectId !== prevState.selectedProject),
       selectedProject: undefined
     }));
   }
@@ -85,25 +91,24 @@ function ProjectProvider({ children }) {
     }));
   }
 
-  
-    return (
-        <ProjectContext.Provider
-          value={{
-            projectState,
-            selectedProject: projectState.selectedProject,
-            projects: projectState.projects,
-            tasks: projectState.tasks,
-            handleClick,
-            saveProject,
-            handleCancel,
-            handleSelect,
-            handleDelete,
-            taskClickHandle,
-            deleteTask
-          }}>
-            {children}
-          </ProjectContext.Provider>
-    );
-  }
+  return (
+    <ProjectContext.Provider
+      value={{
+        projectState,
+        selectedProject: projectState.selectedProject,
+        projects: projectState.projects,
+        tasks: projectState.tasks,
+        handleClick,
+        saveProject,
+        handleCancel,
+        handleSelect,
+        handleDelete,
+        taskClickHandle,
+        deleteTask,
+      }}>
+      {children}
+    </ProjectContext.Provider>
+  );
+}
 
 export default ProjectProvider;

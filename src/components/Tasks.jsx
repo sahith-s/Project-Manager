@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { ProjectContext } from './store/ProjectProvider';
 
 export default function Tasks({ List }) {
-  const { taskClickHandle,handleCancel } = useContext(ProjectContext);
+  const { taskClickHandle,deleteTask} = useContext(ProjectContext);
   const ref = useRef();
 
   return (
@@ -41,7 +41,7 @@ export default function Tasks({ List }) {
             {task.text}
             <button
               className="absolute top-2 right-2 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
-              onClick={() => handleCancel(task.id)}
+              onClick={() => deleteTask(task.id)}
             >
               Clear
             </button>
